@@ -11,10 +11,11 @@
         @csrf
         @method('PUT')
 
-        <!-- Champs cachés pour les scores finaux -->
+        <!-- Champs cachés pour les scores finaux et le temps d'attente -->
         <input type="hidden" id="final_score_team_1" name="score_team_1" value="{{ old('score_team_1', $match->score_team_1) }}">
         <input type="hidden" id="final_score_team_2" name="score_team_2" value="{{ old('score_team_2', $match->score_team_2) }}">
         <input type="hidden" id="match_duration" name="match_duration" value="{{ old('match_duration', $match->duration ?? 0) }}">
+        <input type="hidden" id="wait_time" name="wait_time" value="{{ old('wait_time', $match->wait_time ?? 0) }}">
 
         <!-- Valeur d'incrémentation -->
         <div class="form-group">
@@ -41,33 +42,45 @@
             <button type="button" id="decrease_score_team_2" class="btn btn-danger">Décrémenter Score Équipe 2</button>
         </div>
 
+        <!-- Temps d'attente -->
+        <div class="form-group">
+            <label for="wait_time">Temps d'Attente</label>
+            <div>
+                <label for="wait_time_min">Minutes:</label>
+                <input type="number" id="wait_time_min" value="{{ old('wait_time_min', floor($match->wait_time / 60)) }}">
+                <label for="wait_time_sec">Secondes:</label>
+                <input type="number" id="wait_time_sec" value="{{ old('wait_time_sec', $match->wait_time % 60) }}">
+                <button type="button" id="save_wait_time" class="btn btn-primary">Enregistrer Temps d'Attente</button>
+            </div>
+        </div>
+
+        <!-- Configuration du Chronomètre -->
+        <div class="timer-config">
+            <h2>Configuration du Chronomètre</h2>
+            <div>
+                <label for="duree_impro_min">Minutes:</label>
+                <input type="number" id="duree_impro_min" value="{{ old('duree_impro_min', floor($match->duration / 60)) }}">
+                <label for="duree_impro_sec">Secondes:</label>
+                <input type="number" id="duree_impro_sec" value="{{ old('duree_impro_sec', $match->duration % 60) }}">
+                <button type="button" id="start_timer_impro" class="btn btn-primary">Enregistrer Chronomètre</button>
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-primary">Enregistrer</button>
     </form>
 
     <a href="{{ route('employee.matches.index') }}" class="btn btn-secondary">Retour à la liste des matchs</a>
     <a href="{{ route('employee.matches.show', $match->id) }}" class="btn btn-primary">Afficher le Match</a>
-    <a href="{{ route('display.match', $match->id) }}" target="_blank" class="btn btn-primary">Lancer l'affichage du match</a>
-
-    <div class="timer-config">
-        <h2>Configuration du Chronomètre</h2>
-        <div>
-            <label for="duree_impro_min">Minutes:</label>
-            <input type="number" id="duree_impro_min" value="{{ old('duree_impro_min', floor($match->duration / 60)) }}">
-            <label for="duree_impro_sec">Secondes:</label>
-            <input type="number" id="duree_impro_sec" value="{{ old('duree_impro_sec', $match->duration % 60) }}">
-            <button type="button" id="start_timer_impro" class="btn btn-primary">Démarrer Chronomètre</button>
-        </div>
-    </div>
-
-    <!-- Chronomètre synchronisé -->
-    <div class="col-md-2 text-center">
-        <h2>Chronomètre</h2>
-        <div id="edit_timer_display">00:00</div>
-    </div>
+    <a href="{{ route('display.match', $match->id) }}" id="fullscreen_button" class="btn btn-primary">Lancer l'affichage du match</a>
+    <a href="{{ route('wait_time', ['matchId' => $match->id]) }}" id="fullscreen_button" class="btn btn-success">Lancer l'affichage en premier plan</a>
 </div>
+
 @php
     $matchDuration = $match->duration ?? 0;
 @endphp
+
+<script src="{{ asset('js/fullscreen.js') }}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const scoreTeam1Range = document.getElementById('score_team_1');
@@ -77,6 +90,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const incrementValueRange = document.getElementById('increment_value');
     const incrementDisplay = document.getElementById('increment_display');
     const matchDurationInput = document.getElementById('match_duration');
+    const waitTimeInput = document.getElementById('wait_time');
+    const waitTimeMinInput = document.getElementById('wait_time_min');
+    const waitTimeSecInput = document.getElementById('wait_time_sec');
+    const startTimerImproButton = document.getElementById('start_timer_impro');
+    const saveWaitTimeButton = document.getElementById('save_wait_time');
 
     function updateHiddenScores() {
         document.getElementById('final_score_team_1').value = scoreTeam1Range.value;
@@ -98,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify({
                 score_team_1: scoreTeam1Range.value,
                 score_team_2: scoreTeam2Range.value,
+                wait_time: waitTimeInput.value,
                 match_duration: matchDurationInput.value
             })
         }).then(response => {
@@ -145,15 +164,21 @@ document.addEventListener('DOMContentLoaded', function() {
         incrementDisplay.textContent = incrementValueRange.value;
     });
 
-    // Configuration du chronomètre
-    document.getElementById('start_timer_impro').addEventListener('click', function() {
-        const minutes = parseInt(document.getElementById('duree_impro_min').value, 10) || 0;
-        const seconds = parseInt(document.getElementById('duree_impro_sec').value, 10) || 0;
-        const duration = minutes * 60 + seconds;
+    document.getElementById('save_wait_time').addEventListener('click', function() {
+        const waitMinutes = parseInt(waitTimeMinInput.value) || 0;
+        const waitSeconds = parseInt(waitTimeSecInput.value) || 0;
+        const waitTime = (waitMinutes * 60) + waitSeconds;
+        waitTimeInput.value = waitTime;
+        autoSave();
+    });
 
-        matchDurationInput.value = duration;
+    startTimerImproButton.addEventListener('click', function() {
+        const durationMinutes = parseInt(document.getElementById('duree_impro_min').value) || 0;
+        const durationSeconds = parseInt(document.getElementById('duree_impro_sec').value) || 0;
+        const matchDuration = (durationMinutes * 60) + durationSeconds;
+        matchDurationInput.value = matchDuration;
+        autoSave();
     });
 });
 </script>
-
 @endsection

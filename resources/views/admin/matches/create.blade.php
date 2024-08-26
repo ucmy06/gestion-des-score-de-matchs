@@ -29,6 +29,14 @@
         <label for="score_team_2">Score Team 2</label>
         <input type="number" name="score_team_2" id="score_team_2">
     </div>
+    <div>
+        <label for="match_duration">Durée du match</label>
+        <input type="number" name="match_duration" id="match_duration" class="form-control">
+    </div>
+    <div>
+        <label for="wait_time">Temps d'attente (optionnel)</label>
+        <input type="number" name="wait_time" id="wait_time" class="form-control">
+    </div>
     <button type="submit">Creer Match</button>
 </form>
 

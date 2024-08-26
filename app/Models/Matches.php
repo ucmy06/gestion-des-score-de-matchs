@@ -17,8 +17,9 @@ class Matches extends Model
         'score_team_2',
         'match_date',
         'created_by',
-        // 'status', // Assurez-vous que 'status' est bien inclus ici
+        // 'status', // je n'utilise plus le statut 
         'duration', // Ajoutez ce champ ici
+        'wait_time'
 
     ];
 

@@ -1,0 +1,69 @@
+/* Styles pour améliorer l'apparence de la page de connexion */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+}
+
+.card {
+    border-radius: 12px;
+    border: none;
+}
+
+.card h2 {
+    color: #495057;
+    font-weight: 700;
+}
+
+.input-group-text {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.input-group .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-check-label {
+    color: #6c757d;
+}
+
+.text-muted {
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+.text-danger {
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Ajout d'une animation de survol pour le bouton */
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Styles pour le bouton "Mot de passe oublié" */
+.forgot-password-btn {
+    display: block;
+    margin: 20px auto 0;
+    text-align: center;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.forgot-password-btn:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}

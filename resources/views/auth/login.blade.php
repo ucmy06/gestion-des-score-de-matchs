@@ -17,6 +17,11 @@
             <input type="password" id="password" name="password" class="form-control" required>
         </div>
 
+        <a class="forgot-password-link" href="{{ route('password.request') }}">
+            Mot de passe oublié ?
+        </a>
+        
+        
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Se connecter</button>
         </div>

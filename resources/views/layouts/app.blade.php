@@ -78,26 +78,9 @@
     </style>
 </head>
 <body>
-    <!-- <video class="background-video" autoplay muted loop>
-        <source src="https://static.vecteezy.com/system/resources/previews/017/274/159/mp4/stadium-super-bowl-food-or-drink-promotion-you-can-add-product-free-video.mp4" type="video/mp4">
-        Votre navigateur ne prend pas en charge les vidéos.
-    </video> -->
-
-    <nav>
-        <ul>
-
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Profile</a>
-                <div class="dropdown-content">
-                    <a href="{{ route('profile.edit') }}">Modifier votre profile</a>
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Déconnexion</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </div>
-            </li>
-        </ul>
-    </nav>
+    @auth
+        @include('layouts.nav') <!-- Inclusion de la barre de navigation seulement si l'utilisateur est authentifié -->
+    @endauth
 
     <main>
         @if (session('success'))

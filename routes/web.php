@@ -17,6 +17,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Employee\EmployeeMatchController;
 use App\Http\Controllers\Admin\TeamController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,23 +77,47 @@ Route::middleware(['auth', 'checkRole:employee'])->prefix('employee')->name('emp
         return redirect()->route('display.match', $id);
     })->name('employee.matches.launch');
     Route::put('/employee/matches/{match}', [EmployeeMatchController::class, 'update'])->name('employee.matches.update');
+    Route::post('/employee/matches', [EmployeeMatchController::class, 'store'])->name('employee.matches.store');
 
     Route::get('/employee/matches/{match}/edit-logo', [EmployeeMatchController::class, 'editLogo'])->name('employee.matches.editLogo');
     Route::put('/employee/matches/{match}/update-logo', [EmployeeMatchController::class, 'updateLogo'])->name('employee.matches.updateLogo');
+    Route::post('/employee/matches/{match}/start_timer', [EmployeeMatchController::class, 'startTimer'])->name('employee.matches.start_timer');
+
+    Route::get('/employee/matches/{id}/fullscreen', [EmployeeMatchController::class, 'fullscreen'])->name('employee.matches.fullscreen');
+
+    Route::post('/matches/{match}/start-timer-with-delay', [EmployeeMatchController::class, 'startTimerWithDelay'])->name('employee.matches.startTimerWithDelay');
+    Route::get('/matches/{id}/wait-time', [EmployeeMatchController::class, 'showWaitTime'])->name('employee.matches.waitTime');
+    Route::get('/match/{id}/scores', [EmployeeMatchController::class, 'getScores']);
 
 
 });
+
+
+
 
 // Route pour la page d'accueil après connexion
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 
+// // Route pour le temps d'attente
+// Route::get('/wait-time', function () {
+//     $remainingWaitTime = 300; // Example: 5 minutes in seconds
+//     return view('display.wait_time', compact('remainingWaitTime'));
+// })->name('wait_time');
+
+
+// Route for displaying the match (this should match the route name used in your Blade file)
+Route::get('/display/match/{id}', [DisplayController::class, 'show'])->name('match.display');
+
+
+
 // Route pour le panneau d'affichage
 
 Route::get('/display', [DisplayController::class, 'index'])->name('display.index');
 Route::get('/display/{id}/launch', [DisplayController::class, 'launch'])->name('display.match');
 Route::get('/display/show', [DisplayController::class, 'show'])->name('display.show');
+Route::get('/wait-time/{matchId}', [EmployeeMatchController::class, 'showWaitTime'])->name('wait_time');
 
 // Route pour le panneau de contrôle
 Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->group(function () {
@@ -103,5 +129,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
+    // Afficher le formulaire de demande de réinitialisation de mot de passe
+    Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+
+// Envoyer l'email avec le lien de réinitialisation de mot de passe
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+// Afficher le formulaire de réinitialisation de mot de passe
+Route::get('password/reset/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+// Soumettre le formulaire de réinitialisation de mot de passe
+Route::post('password/reset', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])
+    ->name('password.update');
 });

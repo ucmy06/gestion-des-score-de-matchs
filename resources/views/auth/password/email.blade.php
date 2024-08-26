@@ -19,6 +19,8 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Envoyer le lien de réinitialisation</button>
+        <!-- Retour au login -->
+        <a href="{{ route('login') }}" class="forgot-password-btn">Retour à la connexion</a>
     </form>
 </div>
 @endsection

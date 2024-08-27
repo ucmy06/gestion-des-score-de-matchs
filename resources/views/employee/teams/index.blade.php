@@ -11,14 +11,13 @@
             margin: 0;
             padding: 20px;
         }
-
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 20px;
         }
 
-        a.button {
+        a.button, a.retour-button {
             display: inline-block;
             padding: 10px 20px;
             margin-bottom: 20px;
@@ -29,7 +28,7 @@
             text-align: center;
         }
 
-        a.button:hover {
+        a.button:hover, a.retour-button:hover {
             background-color: #0056b3;
         }
 
@@ -97,9 +96,9 @@
     </style>
 </head>
 <body>
-    
     <h1>Liste des Équipes</h1>
     <a href="{{ route('employee.teams.create') }}" class="button">Ajouter une nouvelle équipe</a>
+    <a href="{{ route('home') }}" class="retour-button">Retour</a>
     <table>
         <thead>
             <tr>

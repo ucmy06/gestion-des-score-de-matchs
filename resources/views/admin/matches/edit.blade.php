@@ -45,22 +45,23 @@
             <input type="number" id="wait_time" name="wait_time" class="form-control" value="{{ old('wait_time', $match->wait_time ?? 0) }}">
         </div>
 
+        <!-- Configuration du Chronomètre -->
+        <div class="form-group">
+            <h2>Configuration du Chronomètre</h2>
+            <div>
+                <label for="duree_impro_min">Minutes:</label>
+                <input type="number" id="duree_impro_min" value="{{ old('duree_impro_min', floor($match->duration / 60)) }}">
+                <label for="duree_impro_sec">Secondes:</label>
+                <input type="number" id="duree_impro_sec" value="{{ old('duree_impro_sec', $match->duration % 60) }}">
+                <button type="button" id="start_timer_impro" class="btn btn-primary">Démarrer Chronomètre</button>
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-primary">Enregistrer</button>
     </form>
 
     <a href="{{ route('admin.matches.index') }}" class="btn btn-secondary">Retour à la liste des matchs</a>
     <a href="{{ route('admin.matches.show', $match->id) }}" class="btn btn-primary">Afficher le Match</a>
-
-    <div class="timer-config">
-        <h2>Configuration du Chronomètre</h2>
-        <div>
-            <label for="duree_impro_min">Minutes:</label>
-            <input type="number" id="duree_impro_min" value="{{ old('duree_impro_min', floor($match->duration / 60)) }}">
-            <label for="duree_impro_sec">Secondes:</label>
-            <input type="number" id="duree_impro_sec" value="{{ old('duree_impro_sec', $match->duration % 60) }}">
-            <button type="button" id="start_timer_impro" class="btn btn-primary">Démarrer Chronomètre</button>
-        </div>
-    </div>
 </div>
 
 @php
@@ -102,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 score_team_2: scoreTeam2Range.value,
                 wait_time: waitTimeInput.value,
                 match_duration: matchDurationInput.value
-                
             })
         }).then(response => {
             if (response.ok) {
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('decrease_score_team_1').addEventListener('click', function() {
         let decrementValue = parseInt(incrementValueRange.value);
-        scoreTeam1Range.value = parseInt(scoreTeam1Range.value) - decrementValue;
+        scoreTeam1Range.value = Math.max(0, parseInt(scoreTeam1Range.value) - decrementValue);
         updateDisplay();
         updateHiddenScores();
         autoSave();
@@ -139,24 +139,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('decrease_score_team_2').addEventListener('click', function() {
         let decrementValue = parseInt(incrementValueRange.value);
-        scoreTeam2Range.value = parseInt(scoreTeam2Range.value) - decrementValue;
+        scoreTeam2Range.value = Math.max(0, parseInt(scoreTeam2Range.value) - decrementValue);
         updateDisplay();
         updateHiddenScores();
         autoSave();
     });
 
+    document.getElementById('start_timer_impro').addEventListener('click', function() {
+        let minutes = parseInt(document.getElementById('duree_impro_min').value) || 0;
+        let seconds = parseInt(document.getElementById('duree_impro_sec').value) || 0;
+        matchDurationInput.value = (minutes * 60) + seconds;
+    });
+
     incrementValueRange.addEventListener('input', function() {
         incrementDisplay.textContent = incrementValueRange.value;
     });
-
-    // Configuration du chronomètre
-    document.getElementById('start_timer_impro').addEventListener('click', function() {
-        const minutes = parseInt(document.getElementById('duree_impro_min').value, 10) || 0;
-        const seconds = parseInt(document.getElementById('duree_impro_sec').value, 10) || 0;
-        const duration = minutes * 60 + seconds;
-
-        matchDurationInput.value = duration;
-    });
 });
 </script>
+
+<style>
+    /* CSS pour les champs de score */
+    .form-control {
+        background-color: #f5f5f5;
+    }
+    
+    .btn-success {
+        background-color: green;
+        color: white;
+    }
+    
+    .btn-danger {
+        background-color: red;
+        color: white;
+    }
+    
+    .btn-primary {
+        background-color: blue;
+        color: white;
+    }
+    
+    .btn-secondary {
+        background-color: grey;
+        color: white;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+</style>
 @endsection

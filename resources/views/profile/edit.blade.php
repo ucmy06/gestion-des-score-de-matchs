@@ -6,6 +6,7 @@
     <title>Edit Profile</title>
     @vite('resources/css/app.css')
 </head>
+
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <div class="container mx-auto my-8 p-8 bg-white rounded-lg shadow-md">
         <h1 class="text-2xl font-bold mb-6">Edit Profile</h1>

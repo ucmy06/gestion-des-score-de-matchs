@@ -1,69 +1,76 @@
-/* Styles pour améliorer l'apparence de la page de connexion */
-body {
-    background-color: #f8f9fa;
-    font-family: 'Roboto', sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* resources/css/app.css */
 
-.card {
-    border-radius: 12px;
-    border: none;
-}
-
-.card h2 {
-    color: #495057;
-    font-weight: 700;
-}
-
-.input-group-text {
-    background-color: #007bff;
-    color: white;
-    border: none;
-}
-
-.input-group .form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.form-check-label {
-    color: #6c757d;
-}
-
-.text-muted {
-    font-size: 0.9rem;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    transition: background-color 0.3s ease-in-out, transform 0.2s;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-    transform: scale(1.02);
-}
-
-.text-danger {
-    transition: opacity 0.5s ease-in-out;
-}
-
-/* Ajout d'une animation de survol pour le bouton */
-.btn-primary:active {
-    transform: scale(0.98);
-}
-
-/* Styles pour le bouton "Mot de passe oublié" */
-.forgot-password-btn {
-    display: block;
-    margin: 20px auto 0;
+.btn {
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem; /* rounded */
     text-align: center;
-    color: #007bff;
-    text-decoration: none;
-    font-size: 0.9rem;
+    display: inline-block;
 }
 
-.forgot-password-btn:hover {
-    color: #0056b3;
-    text-decoration: underline;
+.btn-blue {
+    background-color: #2563eb; /* bg-blue-600 */
+    color: white;
+}
+
+.btn-blue:hover {
+    background-color: #1d4ed8; /* hover:bg-blue-700 */
+}
+
+.btn-teal {
+    background-color: #14b8a6; /* bg-teal-600 */
+    color: white;
+}
+
+.btn-teal:hover {
+    background-color: #0d9488; /* hover:bg-teal-700 */
+}
+
+.btn-yellow {
+    background-color: #facc15; /* bg-yellow-600 */
+    color: black;
+}
+
+.btn-yellow:hover {
+    background-color: #eab308; /* hover:bg-yellow-700 */
+}
+
+.btn-red {
+    background-color: #ef4444; /* bg-red-600 */
+    color: white;
+}
+
+.btn-red:hover {
+    background-color: #dc2626; /* hover:bg-red-700 */
+}
+
+.text-black {
+    color: black;
+}
+
+.bg-gray-100 {
+    background-color: #f3f4f6; /* bg-gray-100 */
+}
+
+.bg-gray-200 {
+    background-color: #e5e7eb; /* bg-gray-200 */
+}
+
+.bg-gray-300 {
+    background-color: #d1d5db; /* bg-gray-300 */
+}
+
+.bg-gray-800 {
+    background-color: #1f2937; /* bg-gray-800 */
+}
+
+.hover\:bg-gray-200:hover {
+    background-color: #e5e7eb; /* hover:bg-gray-200 */
+}
+
+.text-white {
+    color: white;
 }

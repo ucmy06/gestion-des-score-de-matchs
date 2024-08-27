@@ -1,48 +1,50 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-semibold mb-4 text-black">Matchs</h1>
+    @if(auth()->check() && auth()->user()->role === 'employee')
+        <a href="{{ route('employee.matches.create') }}" class="btn btn-blue mb-4 inline-block">Ajouter un Match</a>
+    @endif
 
-<div class="container">
-    <h1>Matchs</h1>
-    <a href="{{ route('employee.matches.create') }}" class="btn btn-primary">Ajouter un Match</a>
-    <!-- @if(auth()->user()->role === 'admin')
-        <a href="{{ route('employee.matches.create') }}" class="btn btn-primary">Ajouter un Match</a>
-    @endif -->
-    
-    <table class="table mt-3">
-        <thead>
+    <table class="min-w-full bg-gray-200 border border-gray-300 rounded-lg shadow-md">
+        <thead class="bg-gray-800 text-white">
             <tr>
-                <th>ID</th>
-                <th>Équipe 1</th>
-                <th>Équipe 2</th>
-                <th>Score Équipe 1</th>
-                <th>Score Équipe 2</th>
-                <th>Actions</th>
+                <th class="py-2 px-4 border-b">ID</th>
+                <th class="py-2 px-4 border-b">Équipe 1</th>
+                <th class="py-2 px-4 border-b">Équipe 2</th>
+                <th class="py-2 px-4 border-b">Score Équipe 1</th>
+                <th class="py-2 px-4 border-b">Score Équipe 2</th>
+                <th class="py-2 px-4 border-b">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($matches as $match)
-            <tr>
-                <td>{{ $match->id }}</td>
-                <td>{{ $match->team1 ? $match->team1->name : 'Équipe supprimée' }}</td>
-                <td>{{ $match->team2 ? $match->team2->name : 'Équipe supprimée' }}</td>
-                <td>{{ $match->score_team_1 }}</td>
-                <td>{{ $match->score_team_2 }}</td>
-                <td>
-                    <a href="{{ route('employee.matches.show', $match->id) }}" class="btn btn-info">Voir journal du match</a>
+            @forelse($matches as $match)
+            <tr class="bg-gray-100 hover:bg-gray-200">
+                <td class="py-2 px-4 border-b text-black">{{ $match->id }}</td>
+                <td class="py-2 px-4 border-b text-black">{{ $match->team1 ? $match->team1->name : 'Équipe supprimée' }}</td>
+                <td class="py-2 px-4 border-b text-black">{{ $match->team2 ? $match->team2->name : 'Équipe supprimée' }}</td>
+                <td class="py-2 px-4 border-b text-black">{{ $match->score_team_1 }}</td>
+                <td class="py-2 px-4 border-b text-black">{{ $match->score_team_2 }}</td>
+                <td class="py-2 px-4 border-b">
+                    <a href="{{ route('employee.matches.show', $match->id) }}" class="btn btn-teal">Voir journal</a>
                     @if(auth()->user()->role === 'employee')
-                        <a href="{{ route('employee.matches.edit', $match->id) }}" class="btn btn-warning">Lancer le match</a>
+                        <a href="{{ route('employee.matches.edit', $match->id) }}" class="btn btn-yellow ml-2">Lancer le match</a>
                     @endif
                     @if(auth()->user()->role === 'admin')
                         <form action="{{ route('employee.matches.destroy', $match->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                            <button type="submit" class="btn btn-red ml-2">Supprimer</button>
                         </form>
                     @endif
                 </td>
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="6" class="py-2 px-4 text-center text-black">Aucun match disponible.</td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

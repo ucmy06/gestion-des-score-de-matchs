@@ -1,4 +1,6 @@
 import './bootstrap';
+import '../css/app.css'; // Assurez-vous que ce chemin est correct
+
 // Ajoutez une animation pour le message d'erreur
 document.addEventListener("DOMContentLoaded", function() {
     const errorMessages = document.querySelectorAll('.text-danger');

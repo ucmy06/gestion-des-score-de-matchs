@@ -10,7 +10,7 @@
             <div class="hidden sm:flex sm:space-x-4">
                 @if(auth()->check())
                     @if(auth()->user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Tableau de Bord Admin</a>
+                        <a href="#" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Tableau de Bord Admin</a>
                         <a href="{{ route('admin.employees.index') }}" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Gérer les Employés</a>
                         <a href="{{ route('admin.matches.index') }}" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Gérer les Matchs</a>
                         <a href="{{ route('admin.teams.index') }}" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Gérer les Équipes</a>

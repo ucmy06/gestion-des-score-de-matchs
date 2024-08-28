@@ -27,7 +27,24 @@
 
         @yield('content')
     </main>
-
+    
     @vite('resources/js/app.js')
+    
+
+    
+    
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    const socket = io('http://localhost:3000'); // Assurez-vous que le port correspond à celui de votre serveur
+
+    socket.on('message', (data) => {
+        console.log('Message received from server:', data);
+        // Vous pouvez maintenant manipuler le DOM en fonction des données reçues
+    });
+
+    // Pour envoyer un message au serveur
+    socket.emit('message', 'Hello, server!');
+</script>
+
 </body>
 </html>

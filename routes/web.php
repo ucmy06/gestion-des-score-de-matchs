@@ -88,6 +88,10 @@ Route::middleware(['auth', 'checkRole:employee'])->prefix('employee')->name('emp
     Route::post('/matches/{match}/start-timer-with-delay', [EmployeeMatchController::class, 'startTimerWithDelay'])->name('employee.matches.startTimerWithDelay');
     Route::get('/matches/{id}/wait-time', [EmployeeMatchController::class, 'showWaitTime'])->name('employee.matches.waitTime');
     Route::get('/match/{id}/scores', [EmployeeMatchController::class, 'getScores']);
+// routes/web.php
+Route::post('/employee/matches/request-delete/{match}', [EmployeeMatchController::class, 'requestDelete'])
+    ->name('employee.matches.request_delete')
+    ->middleware('auth');
 
 
 });

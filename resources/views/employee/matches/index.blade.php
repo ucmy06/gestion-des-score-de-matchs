@@ -8,14 +8,14 @@
     @endif
 
     <table class="min-w-full bg-gray-200 border border-gray-300 rounded-lg shadow-md">
-        <thead class="bg-gray-800 text-white">
+        <thead class="bg-gray-200 text-black">
             <tr>
-                <th class="py-2 px-4 border-b">ID</th>
-                <th class="py-2 px-4 border-b">Équipe 1</th>
-                <th class="py-2 px-4 border-b">Équipe 2</th>
-                <th class="py-2 px-4 border-b">Score Équipe 1</th>
-                <th class="py-2 px-4 border-b">Score Équipe 2</th>
-                <th class="py-2 px-4 border-b">Actions</th>
+                <th class="px-4 py-2 text-left">ID</th>
+                <th class="px-4 py-2 text-left">Équipe 1</th>
+                <th class="px-4 py-2 text-left">Équipe 2</th>
+                <th class="px-4 py-2 text-left">Score Équipe 1</th>
+                <th class="px-4 py-2 text-left">Score Équipe 2</th>
+                <th class="px-4 py-2 text-left">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -30,13 +30,7 @@
                     <a href="{{ route('employee.matches.show', $match->id) }}" class="btn btn-teal">Voir journal</a>
                     @if(auth()->user()->role === 'employee')
                         <a href="{{ route('employee.matches.edit', $match->id) }}" class="btn btn-yellow ml-2">Lancer le match</a>
-                    @endif
-                    @if(auth()->user()->role === 'admin')
-                        <form action="{{ route('employee.matches.destroy', $match->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-red ml-2">Supprimer</button>
-                        </form>
+
                     @endif
                 </td>
             </tr>

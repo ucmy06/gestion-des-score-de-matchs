@@ -27,19 +27,23 @@
                     <th class="px-4 py-2 text-left">Date</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-300">
-                @forelse($logs as $log)
-                <tr class="hover:bg-gray-200 transition-colors duration-200 ease-in-out">
-                    <td class="px-4 py-2">{{ $log->id }}</td>
-                    <td class="px-4 py-2">{{ $log->user ? $log->user->name : 'Non spécifié' }}</td>
-                    <td class="px-4 py-2">{{ $log->action }}</td>
-                    <td class="px-4 py-2">{{ $log->created_at ? $log->created_at->format('d/m/Y H:i') : 'Non spécifiée' }}</td>
+            <tbody>
+                @foreach($logs as $log)
+                <tr class="bg-gray-100 hover:bg-gray-200">
+                    <td class="py-2 px-4 border-b text-black">{{ $log->id }}</td>
+                    <td class="py-2 px-4 border-b text-black">{{ $log->user->name }}</td>
+                    <td class="py-2 px-4 border-b text-black">
+                        @if($log->change_type === 'increment')
+                            L'équipe {{ $log->match->team1->name }} a marqué {{ $log->points_changed }} point(s) à {{ $log->changed_at->format('d/m/Y H:i') }}
+                        @elseif($log->change_type === 'decrement')
+                            L'équipe {{ $log->match->team2->name }} a reçu une pénalité de {{ $log->points_changed }} point(s) à {{ $log->changed_at->format('d/m/Y H:i') }}
+                        @else
+                            {{ $log->action }}
+                        @endif
+                    </td>
+                    <td class="py-2 px-4 border-b text-black">{{ $log->created_at->format('d/m/Y H:i') }}</td>
                 </tr>
-                @empty
-                <tr>
-                    <td colspan="4" class="text-center px-4 py-2">Aucune action enregistrée.</td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>

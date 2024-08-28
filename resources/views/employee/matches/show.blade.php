@@ -4,7 +4,6 @@
 <div class="container mx-auto px-4 py-6">
     <h1 class="text-3xl font-semibold mb-4 text-black">Détails du Match</h1>
     <div class="bg-gray-50 border border-gray-300 shadow-lg rounded-lg p-6 mb-6">
-        <p class="text-lg font-medium mb-2 text-black"><strong>ID:</strong> {{ $match->id }}</p>
         <p class="text-lg font-medium mb-2 text-black"><strong>Équipe 1:</strong> {{ $match->team1 ? $match->team1->name : 'Non spécifiée' }}</p>
         <p class="text-lg font-medium mb-2 text-black"><strong>Équipe 2:</strong> {{ $match->team2 ? $match->team2->name : 'Non spécifiée' }}</p>
         <p class="text-lg font-medium mb-2 text-black"><strong>Score Équipe 1:</strong> {{ $match->score_team_1 }}</p>

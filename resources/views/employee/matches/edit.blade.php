@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1 class="text-black">Modifier le Match</h1>
+<div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-6">Modifier le Match</h1>
 
-    <!-- Formulaire de mise à jour du match -->
     <form action="{{ route('employee.matches.update', $match->id) }}" method="POST">
         @csrf
         @method('PUT')
@@ -15,65 +14,98 @@
         <input type="hidden" id="match_duration" name="match_duration" value="{{ old('match_duration', $match->duration ?? 0) }}">
         <input type="hidden" id="wait_time" name="wait_time" value="{{ old('wait_time', $match->wait_time ?? 0) }}">
 
-        <!-- Valeur d'incrémentation -->
-        <div class="form-group mb-4">
-            <label for="increment_value" class="form-label text-black">Valeur d'Incrémentation</label>
-            <input type="range" id="increment_value" name="increment_value" class="form-control" min="1" max="100" step="1" value="1">
-            <output id="increment_display" class="d-block text-black">1</output>
-        </div>
+        <!-- Tableau pour les équipes -->
+        <table class="table-wide border-separate border-spacing-6 mb-6 table-spacing">
+            <tbody>
+                <tr>
+                    <!-- Score Équipe 1 (à gauche) -->
+                    <td class="bg-gray-200 rounded p-4 border border-gray-300">
+                        <h2 class="text-xl font-semibold mb-4">Équipe 1</h2>
+                        <label for="score_team_1_display" class="block text-sm mb-2">Score</label>
+                        <input type="number" id="score_team_1_display" name="score_team_1_display" class="form-control w-full" value="{{ old('score_team_1', $match->score_team_1) }}" readonly>
+                        <input type="hidden" id="score_team_1" name="score_team_1" value="{{ old('score_team_1', $match->score_team_1) }}">
+                        <button type="button" id="increase_score_team_1" class="btn btn-success mt-2">Incrémenter Score</button>
+                        <button type="button" id="decrease_score_team_1" class="btn btn-danger mt-2">Décrémenter Score</button>
+                    </td>
 
-        <!-- Score Équipe 1 -->
-        <div class="form-group mb-4">
-            <label for="score_team_1_display" class="form-label text-black">Score Équipe 1</label>
-            <input type="number" id="score_team_1_display" name="score_team_1_display" class="form-control score-field" value="{{ old('score_team_1', $match->score_team_1) }}" readonly>
-            <input type="hidden" id="score_team_1" name="score_team_1" value="{{ old('score_team_1', $match->score_team_1) }}">
-            <button type="button" id="increase_score_team_1" class="btn btn-success">Incrémenter Score Équipe 1</button>
-            <button type="button" id="decrease_score_team_1" class="btn btn-danger">Décrémenter Score Équipe 1</button>
-        </div>
+                    <!-- Score Équipe 2 (à droite) -->
+                    <td class="bg-gray-200 rounded p-4 border border-gray-300">
+                        <h2 class="text-xl font-semibold mb-4 text-right">Équipe 2</h2>
+                        <label for="score_team_2_display" class="block text-sm mb-2">Score</label>
+                        <input type="number" id="score_team_2_display" name="score_team_2_display" class="form-control w-full" value="{{ old('score_team_2', $match->score_team_2) }}" readonly>
+                        <input type="hidden" id="score_team_2" name="score_team_2" value="{{ old('score_team_2', $match->score_team_2) }}">
+                        <button type="button" id="increase_score_team_2" class="btn btn-success mt-2">Incrémenter Score</button>
+                        <button type="button" id="decrease_score_team_2" class="btn btn-danger mt-2">Décrémenter Score</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-        <!-- Score Équipe 2 -->
-        <div class="form-group mb-4">
-            <label for="score_team_2_display" class="form-label text-black">Score Équipe 2</label>
-            <input type="number" id="score_team_2_display" name="score_team_2_display" class="form-control score-field" value="{{ old('score_team_2', $match->score_team_2) }}" readonly>
-            <input type="hidden" id="score_team_2" name="score_team_2" value="{{ old('score_team_2', $match->score_team_2) }}">
-            <button type="button" id="increase_score_team_2" class="btn btn-success">Incrémenter Score Équipe 2</button>
-            <button type="button" id="decrease_score_team_2" class="btn btn-danger">Décrémenter Score Équipe 2</button>
-        </div>
+        <!-- Tableau pour le temps d'attente, la valeur d'incrémentation et le chronomètre -->
+        <table class="table-wide border-separate border-spacing-6 increment-table">
+            <tbody>
+                <tr>
+                    <!-- Temps d'Attente (à gauche) -->
+                    <td class="w-1/3 bg-gray-200 rounded p-4 border border-gray-300">
+                        <h2 class="text-xl font-semibold mb-4">Temps d'Attente</h2>
+                        <div class="form-group mb-6">
+                            <div class="flex flex-col items-center mb-2 w-full">
+                                <label for="wait_time_min" class="mb-1">Minutes:</label>
+                                <input type="number" id="wait_time_min" class="form-control w-full" value="{{ old('wait_time_min', floor($match->wait_time / 60)) }}" min="0">
+                            </div>
+                            <div class="flex flex-col items-center w-full">
+                                <label for="wait_time_sec" class="mb-1">Secondes:</label>
+                                <input type="number" id="wait_time_sec" class="form-control w-full" value="{{ old('wait_time_sec', $match->wait_time % 60) }}" min="0">
+                            </div>
+                            <button type="button" id="save_wait_time" class="btn btn-primary mt-4">Enregistrer</button>
+                        </div>
+                    </td>
 
-        <!-- Temps d'attente -->
-        <div class="form-group mb-4">
-            <label for="wait_time" class="form-label text-black">Temps d'Attente</label>
-            <div class="d-flex align-items-center">
-                <label for="wait_time_min" class="mr-2 text-black">Minutes:</label>
-                <input type="number" id="wait_time_min" class="form-control time-field mr-2" value="{{ old('wait_time_min', floor($match->wait_time / 60)) }}" min="0">
-                <label for="wait_time_sec" class="mr-2 text-black">Secondes:</label>
-                <input type="number" id="wait_time_sec" class="form-control time-field" value="{{ old('wait_time_sec', $match->wait_time % 60) }}" min="0">
-                <button type="button" id="save_wait_time" class="btn btn-primary ml-2">Enregistrer Temps d'Attente</button>
-            </div>
-        </div>
+                    <!-- Valeur d'Incrémentation (au centre) -->
+                    <td class="w-1/3 bg-gray-200 rounded p-4 border border-gray-300">
+                        <h2 class="text-xl font-semibold mb-4 text-center">Valeur d'Incrémentation</h2>
+                        <div class="form-group mb-6">
+                            <input type="range" id="increment_value" name="increment_value" class="form-control w-full" min="1" max="100" step="1" value="1">
+                            <output id="increment_display" class="block mt-2 text-center">1</output>
+                        </div>
+                    </td>
 
-        <!-- Configuration du Chronomètre -->
-        <div class="form-group mb-4">
-            <h2 class="text-xl font-semibold mb-2 text-black">Configuration du Chronomètre</h2>
-            <div class="d-flex align-items-center">
-                <label for="duree_impro_min" class="mr-2 text-black">Minutes:</label>
-                <input type="number" id="duree_impro_min" class="form-control time-field mr-2" value="{{ old('duree_impro_min', floor($match->duration / 60)) }}" min="0">
-                <label for="duree_impro_sec" class="mr-2 text-black">Secondes:</label>
-                <input type="number" id="duree_impro_sec" class="form-control time-field" value="{{ old('duree_impro_sec', $match->duration % 60) }}" min="0">
-                <button type="button" id="start_timer_impro" class="btn btn-primary ml-2">Enregistrer Chronomètre</button>
-            </div>
-        </div>
+                    <!-- Chronomètre (à droite) -->
+                    <td class="w-1/3 bg-gray-200 rounded p-4 border border-gray-300">
+                        <h2 class="text-xl font-semibold mb-4 text-center">Chronomètre</h2>
+                        <div class="form-group">
+                            <div class="flex flex-col items-center mb-2 w-full">
+                                <label for="duree_impro_min" class="mb-1">Minutes:</label>
+                                <input type="number" id="duree_impro_min" class="form-control w-full" value="{{ old('duree_impro_min', floor($match->duration / 60)) }}" min="0">
+                            </div>
+                            <div class="flex flex-col items-center w-full">
+                                <label for="duree_impro_sec" class="mb-1">Secondes:</label>
+                                <input type="number" id="duree_impro_sec" class="form-control w-full" value="{{ old('duree_impro_sec', $match->duration % 60) }}" min="0">
+                            </div>
+                            <button type="button" id="start_timer_impro" class="btn btn-primary mt-4">Enregistrer</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="submit" class="btn btn-primary mt-4">Enregistrer</button>
     </form>
 
-    <div class="mt-4">
+    <!-- Conteneur des boutons -->
+    <div class="button-group mt-6">
         <a href="{{ route('employee.matches.index') }}" class="btn btn-secondary">Retour à la liste des matchs</a>
         <a href="{{ route('employee.matches.show', $match->id) }}" class="btn btn-primary">Afficher le Match</a>
         <a href="{{ route('display.match', $match->id) }}" id="fullscreen_button" class="btn btn-primary">Lancer l'affichage du match</a>
         <a href="{{ route('wait_time', ['matchId' => $match->id]) }}" id="fullscreen_button" class="btn btn-success">Lancer l'affichage en premier plan</a>
     </div>
 </div>
+
+
+
+
+
+
 
 @php
     $matchDuration = $match->duration ?? 0;
@@ -138,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('decrease_score_team_1').addEventListener('click', function() {
         let decrementValue = parseInt(incrementValueRange.value);
-        scoreTeam1Range.value = Math.max(0, parseInt(scoreTeam1Range.value) - decrementValue);
+        scoreTeam1Range.value = parseInt(scoreTeam1Range.value) - decrementValue;
         updateDisplay();
         updateHiddenScores();
         autoSave();
@@ -154,60 +186,137 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('decrease_score_team_2').addEventListener('click', function() {
         let decrementValue = parseInt(incrementValueRange.value);
-        scoreTeam2Range.value = Math.max(0, parseInt(scoreTeam2Range.value) - decrementValue);
+        scoreTeam2Range.value = parseInt(scoreTeam2Range.value) - decrementValue;
         updateDisplay();
         updateHiddenScores();
         autoSave();
     });
 
-    startTimerImproButton.addEventListener('click', function() {
-        let minutes = parseInt(document.getElementById('duree_impro_min').value) || 0;
-        let seconds = parseInt(document.getElementById('duree_impro_sec').value) || 0;
-        matchDurationInput.value = (minutes * 60) + seconds;
+    incrementValueRange.addEventListener('input', function() {
+        incrementDisplay.textContent = incrementValueRange.value;
     });
 
     saveWaitTimeButton.addEventListener('click', function() {
-        let minutes = parseInt(waitTimeMinInput.value) || 0;
-        let seconds = parseInt(waitTimeSecInput.value) || 0;
-        waitTimeInput.value = (minutes * 60) + seconds;
+        let waitTimeMinutes = parseInt(waitTimeMinInput.value) || 0;
+        let waitTimeSeconds = parseInt(waitTimeSecInput.value) || 0;
+        waitTimeInput.value = waitTimeMinutes * 60 + waitTimeSeconds;
+        autoSave();
     });
 
-    incrementValueRange.addEventListener('input', function() {
-        incrementDisplay.textContent = incrementValueRange.value;
+    startTimerImproButton.addEventListener('click', function() {
+        let durationMinutes = parseInt(document.getElementById('duree_impro_min').value) || 0;
+        let durationSeconds = parseInt(document.getElementById('duree_impro_sec').value) || 0;
+        matchDurationInput.value = durationMinutes * 60 + durationSeconds;
+        autoSave();
     });
 });
 </script>
 <style>
+
+    /* CSS pour les tableaux */
+.table-wide {
+    width: 100%;
+    max-width: 1200px; /* Ajustez la largeur maximale selon vos besoins */
+    margin: 0 auto; /* Centre la table */
+}
+
+.table-wide td {
+    padding: 16px; /* Ajustez l'espacement des cellules si nécessaire */
+}
+
+.table-spacing td {
+    padding: 16px;
+    margin: 0 10px; /* Espace entre les cellules */
+}
+
+/* Ajustement spécifique pour la valeur d'incrémentation */
+.increment-table td {
+    width: 30%; /* Réduit la largeur pour créer plus d'espace */
+}
+
+.increment-table .form-group {
+    margin-bottom: 1rem;
+}
     /* CSS pour les champs de score */
-    .score-field {
-        background-color: gray;
-        color: white;
+    .form-control {
+        background-color: #f5f5f5;
+        border-radius: 4px;
     }
     
-    .time-field {
-        background-color: gray;
-        color: white;
+    .button-group {
+        display: flex;
+        justify-content: center; /* Align buttons horizontally in the center */
+        margin-top: auto; /* Push the button group to the bottom */
+        gap: 10px; /* Space between buttons */
     }
-    
-    /* CSS pour les boutons */
+
+    .button-group .btn {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+
     .btn-success {
         background-color: green;
         color: white;
+        border: none;
     }
     
     .btn-danger {
         background-color: red;
         color: white;
+        border: none;
     }
     
     .btn-primary {
         background-color: blue;
         color: white;
+        border: none;
     }
     
     .btn-secondary {
         background-color: grey;
         color: white;
+        border: none;
     }
-    </style>
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        background-color: #f5f5f5;
+        border-radius: 4px;
+    }
+
+    .btn-success, .btn-danger, .btn-primary, .btn-secondary {
+        color: white;
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    h2 {
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .ml-2 {
+        margin-left: 8px;
+    }
+
+    .mt-2 {
+        margin-top: 8px;
+    }
+
+    .mt-4 {
+        margin-top: 16px;
+    }
+</style>
 @endsection

@@ -34,7 +34,8 @@ class AdminEmployeeController extends Controller
             'role' => 'employee',
         ]);
 
-        return redirect()->route('admin.employees.index')->with('success', 'Employee created successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'l\'employée a été créer avec succès 🎉🥳
+🎉.');
     }
 
     public function edit(User $employee)
@@ -56,12 +57,13 @@ class AdminEmployeeController extends Controller
             'password' => $request->password ? Hash::make($request->password) : $employee->password,
         ]);
 
-        return redirect()->route('admin.employees.index')->with('success', 'Employee updated successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'Employee modifier avec succès 💪⬆💪
+.');
     }
 
     public function destroy(User $employee)
     {
         $employee->delete();
-        return redirect()->route('admin.employees.index')->with('success', 'Employee deleted successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'empoyée supprimer avec succès 🗑🚮🗑.');
     }
 }

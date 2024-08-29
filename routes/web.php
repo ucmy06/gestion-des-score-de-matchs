@@ -65,6 +65,20 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
 
     // Routes pour les équipes
     Route::resource('teams', TeamController::class);
+    Route::prefix('admin')->name('admin.')->group(function () {
+    // Routes pour les fonctionnalités des employés
+    Route::post('/matches/launch/{id}', [AdminMatchController::class, 'launch'])->name('matches.launch');
+    Route::put('/admin/matches/{match}', [AdminMatchController::class, 'update'])->name('admin.matches.update');
+    Route::post('/matches', [AdminMatchController::class, 'store'])->name('matches.store');
+    Route::post('/matches/{match}/request-delete', [AdminMatchController::class, 'requestDelete'])->name('matches.request_delete');
+    Route::get('/matches/{match}/edit-logo', [AdminMatchController::class, 'editLogo'])->name('matches.editLogo');
+    Route::put('/matches/{match}/update-logo', [AdminMatchController::class, 'updateLogo'])->name('matches.updateLogo');
+    Route::post('/admin/matches/{match}/start_timer', [AdminMatchController::class, 'startTimer'])->name('admin.matches.start_timer');
+    Route::get('/matches/{id}/fullscreen', [AdminMatchController::class, 'fullscreen'])->name('matches.fullscreen');
+    Route::post('/matches/{match}/start-timer-with-delay', [AdminMatchController::class, 'startTimerWithDelay'])->name('matches.startTimerWithDelay');
+    Route::get('/matches/{id}/wait-time', [AdminMatchController::class, 'showWaitTime'])->name('matches.waitTime');
+    Route::get('/admin/matches/{id}/scores', [AdminMatchController::class, 'getScores'])->name('admin.matches.scores');
+    });
 });
 
 // Routes pour les employés
@@ -78,7 +92,8 @@ Route::middleware(['auth', 'checkRole:employee'])->prefix('employee')->name('emp
     })->name('employee.matches.launch');
     Route::put('/employee/matches/{match}', [EmployeeMatchController::class, 'update'])->name('employee.matches.update');
     Route::post('/employee/matches', [EmployeeMatchController::class, 'store'])->name('employee.matches.store');
-
+    Route::post('employee/matches/{match}/request-delete', [EmployeeMatchController::class, 'requestDelete'])
+    ->name('employee.matches.request_delete');
     Route::get('/employee/matches/{match}/edit-logo', [EmployeeMatchController::class, 'editLogo'])->name('employee.matches.editLogo');
     Route::put('/employee/matches/{match}/update-logo', [EmployeeMatchController::class, 'updateLogo'])->name('employee.matches.updateLogo');
     Route::post('/employee/matches/{match}/start_timer', [EmployeeMatchController::class, 'startTimer'])->name('employee.matches.start_timer');
@@ -89,9 +104,7 @@ Route::middleware(['auth', 'checkRole:employee'])->prefix('employee')->name('emp
     Route::get('/matches/{id}/wait-time', [EmployeeMatchController::class, 'showWaitTime'])->name('employee.matches.waitTime');
     Route::get('/match/{id}/scores', [EmployeeMatchController::class, 'getScores']);
 // routes/web.php
-Route::post('/employee/matches/request-delete/{match}', [EmployeeMatchController::class, 'requestDelete'])
-    ->name('employee.matches.request_delete')
-    ->middleware('auth');
+
 
 
 });

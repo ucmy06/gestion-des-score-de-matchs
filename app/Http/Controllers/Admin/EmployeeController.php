@@ -33,7 +33,8 @@ class EmployeeController extends Controller
             'role' => 'employee',
         ]);
 
-        return redirect()->route('admin.employees.index')->with('success', 'Employee created successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'l\'employée a été créer avec succès 🎉🥳
+🎉.');
     }
 
     public function edit(User $employee)
@@ -50,13 +51,13 @@ class EmployeeController extends Controller
 
         $employee->update($request->only('name', 'email'));
 
-        return redirect()->route('admin.employees.index')->with('success', 'Employee updated successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'Employee modifier avec succès 💪⬆💪.');
     }
 
     public function destroy(User $employee)
     {
         $employee->delete();
 
-        return redirect()->route('admin.employees.index')->with('success', 'Employee deleted successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'empoyée supprimer avec succès 🗑🚮🗑');
     }
 }

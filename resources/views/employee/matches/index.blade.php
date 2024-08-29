@@ -30,7 +30,12 @@
                     <a href="{{ route('employee.matches.show', $match->id) }}" class="btn btn-teal">Voir journal</a>
                     @if(auth()->user()->role === 'employee')
                         <a href="{{ route('employee.matches.edit', $match->id) }}" class="btn btn-yellow ml-2">Lancer le match</a>
-
+                        {{-- <form action="{{ route('employee.matches.request_delete', $match->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-red ml-2">Demander Suppression</button>
+                        </form> --}}
+                        
+                        
                     @endif
                 </td>
             </tr>

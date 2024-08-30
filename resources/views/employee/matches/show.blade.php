@@ -17,7 +17,7 @@
                 <tr>
                     <th class="py-2 px-4 border-b">ID</th>
                     <th class="py-2 px-4 border-b">Utilisateur</th>
-                    <th class="py-2 px-4 border-b">Action</th>
+                    <th class="py-2 px-4 border-b">variation des points</th>
                     <th class="py-2 px-4 border-b">Date</th>
                 </tr>
             </thead>
@@ -28,14 +28,30 @@
                     <td class="py-2 px-4 border-b text-black">{{ $log->user->name }}</td>
                     <td class="py-2 px-4 border-b text-black">
                         @if($log->change_type === 'increment')
-                            L'équipe {{ $log->match->team1->name }} a marqué {{ $log->points_changed }} point(s) à {{ $log->changed_at->format('d/m/Y H:i') }}
+                            L'équipe {{ $log->match->team1->name }} a marqué {{ $log->points_changed }} point(s) à 
+                            @if($log->changed_at instanceof \Carbon\Carbon)
+                                {{ $log->changed_at->format('d/m/Y H:i') }}
+                            @else
+                                {{ $log->changed_at }}
+                            @endif
                         @elseif($log->change_type === 'decrement')
-                            L'équipe {{ $log->match->team2->name }} a reçu une pénalité de {{ $log->points_changed }} point(s) à {{ $log->changed_at->format('d/m/Y H:i') }}
+                            L'équipe {{ $log->match->team2->name }} a reçu une pénalité de {{ $log->points_changed }} point(s) à 
+                            @if($log->changed_at instanceof \Carbon\Carbon)
+                                {{ $log->changed_at->format('d/m/Y H:i') }}
+                            @else
+                                {{ $log->changed_at }}
+                            @endif
                         @else
                             {{ $log->action }}
                         @endif
                     </td>
-                    <td class="py-2 px-4 border-b text-black">{{ $log->created_at->format('d/m/Y H:i') }}</td>
+                    <td class="py-2 px-4 border-b text-black">
+                        @if($log->created_at instanceof \Carbon\Carbon)
+                            {{ $log->created_at->format('d/m/Y H:i') }}
+                        @else
+                            {{ $log->created_at }}
+                        @endif
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

@@ -49,55 +49,69 @@ class EmployeeMatchController extends Controller
         return view('employee.matches.edit', compact('match', 'teams'));
     }
     public function update(Request $request, Matches $match)
-    {
-        try {
-            // Validation des données de la requête
-            $request->validate([
-                'score_team_1' => 'required|integer',
-                'score_team_2' => 'required|integer',
-                'match_duration' => 'nullable|integer',
-                'end_time' => 'nullable|date',
-                'wait_time' => 'nullable|integer',
-
-            ]);
-
-                    // Ajouter des logs pour déboguer
-        Log::info('Updating match', [
-            'match_id' => $match->id,
-            'input_data' => $request->all()
+{
+    try {
+        // Validation des données de la requête
+        $request->validate([
+            'score_team_1' => 'required|integer',
+            'score_team_2' => 'required|integer',
+            'match_duration' => 'nullable|integer',
+            'end_time' => 'nullable|date',
+            'wait_time' => 'nullable|integer',
         ]);
 
-            // Mise à jour du match
-            $match->update([
-                'score_team_1' => $request->input('score_team_1'),
-                'score_team_2' => $request->input('score_team_2'),
-                'duration' => $request->input('match_duration'),
-                'end_time' => $request->input('end_time'),
-                'wait_time' => $request->input('wait_time'),
+        // Calcul des points changés après la mise à jour
+        $originalScoreTeam1 = $match->getOriginal('score_team_1');
+        $originalScoreTeam2 = $match->getOriginal('score_team_2');
+        $pointsChangedTeam1 = $request->input('score_team_1') - $originalScoreTeam1;
+        $pointsChangedTeam2 = $request->input('score_team_2') - $originalScoreTeam2;
 
-            ]);
-    
-            // Création d'un log
+        // Mise à jour du match
+        $match->update([
+            'score_team_1' => $request->input('score_team_1'),
+            'score_team_2' => $request->input('score_team_2'),
+            'duration' => $request->input('match_duration'),
+            'end_time' => $request->input('end_time'),
+            'wait_time' => $request->input('wait_time'),
+        ]);
+
+        // Création des logs pour les changements
+        if ($pointsChangedTeam1 != 0) {
             \App\Models\Log::create([
                 'user_id' => auth()->id(),
                 'match_id' => $match->id,
-                'action' => 'Mise à jour des scores et de l\'heure de fin',
-                'details' => 'Score Équipe 1: ' . $request->input('score_team_1') . ', Score Équipe 2: ' . $request->input('score_team_2') . ', Heure de fin: ' . $request->input('end_time'),
+                'action' => 'Mise à jour des scores',
+                'details' => 'Score Équipe 1 modifié de ' . $originalScoreTeam1 . ' à ' . $request->input('score_team_1'),
+                'change_type' => $pointsChangedTeam1 > 0 ? 'increment' : 'decrement',
+                'points_changed' => abs($pointsChangedTeam1),
+                'changed_at' => now(),
             ]);
-    
-            // Déclenchement de l'événement
-            event(new ScoreUpdated($match));
-    
-            // Redirection avec message de succès
-            return redirect()->route('employee.matches.index')->with('success', 'Match mis à jour avec succès.');
-    
-        
-        } catch (\Exception $e) {
-            Log::error('Error updating match: ' . $e->getMessage());
-
-            return redirect()->route('employee.matches.index')->with('error', 'Erreur lors de la mise à jour du match.');
         }
+
+        if ($pointsChangedTeam2 != 0) {
+            \App\Models\Log::create([
+                'user_id' => auth()->id(),
+                'match_id' => $match->id,
+                'action' => 'Mise à jour des scores',
+                'details' => 'Score Équipe 2 modifié de ' . $originalScoreTeam2 . ' à ' . $request->input('score_team_2'),
+                'change_type' => $pointsChangedTeam2 > 0 ? 'increment' : 'decrement',
+                'points_changed' => abs($pointsChangedTeam2),
+                'changed_at' => now(),
+            ]);
+        }
+
+        // Déclenchement de l'événement
+        event(new ScoreUpdated($match));
+
+        // Redirection avec message de succès
+        return redirect()->route('employee.matches.index')->with('success', 'Match mis à jour avec succès.');
+
+    } catch (\Exception $e) {
+        Log::error('Error updating match: ' . $e->getMessage());
+
+        return redirect()->route('employee.matches.index')->with('error', 'Erreur lors de la mise à jour du match.');
     }
+}
     
 
     public function store(Request $request)

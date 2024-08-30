@@ -122,12 +122,12 @@ class AdminMatchController extends Controller
         event(new ScoreUpdated($match));
 
         // Redirection avec message de succès
-        return redirect()->route('employee.matches.index')->with('success', 'Match mis à jour avec succès.');
+        return redirect()->route('admin.matches.index')->with('success', 'Match mis à jour avec succès.');
 
     } catch (\Exception $e) {
         Log::error('Error updating match: ' . $e->getMessage());
 
-        return redirect()->route('employee.matches.index')->with('error', 'Erreur lors de la mise à jour du match.');
+        return redirect()->route('admin.matches.index')->with('error', 'Erreur lors de la mise à jour du match.');
     }
 }
 

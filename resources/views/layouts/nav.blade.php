@@ -3,11 +3,11 @@
     <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div class="relative flex h-16 items-center justify-between">
 
-            <!-- Logo ou titre de l'application aligné à gauche -->
-            <a href="{{ url('/') }}" class="text-white text-2xl font-bold flex-shrink-0">App</a>
+            <!-- Logo ou titre de l'application -->
+            <a href="{{ url('/') }}" class="text-white text-2xl font-bold">App</a>
 
-            <!-- Menu de navigation centré -->
-            <div class="hidden sm:flex sm:space-x-4 mx-auto">
+            <!-- Menu de navigation -->
+            <div class="hidden sm:flex sm:space-x-4">
                 @if(auth()->check())
                     @if(auth()->user()->role === 'admin')
                         <a href="#" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Tableau de Bord Admin</a>
@@ -22,9 +22,9 @@
                 @endif
             </div>
 
-            <!-- Profil et déconnexion aligné à droite -->
+            <!-- Profil et déconnexion -->
             @auth
-                <div class="relative flex-shrink-0">
+                <div class="relative">
                     <button id="profileMenuButton" class="text-white hover:text-gray-300 focus:outline-none">
                         Profile
                     </button>
@@ -40,3 +40,11 @@
         </div>
     </div>
 </nav>
+
+<!-- Script JavaScript pour gérer la liste déroulante du profil -->
+<script>
+    document.getElementById('profileMenuButton').addEventListener('click', function() {
+        var menu = document.getElementById('profileMenu');
+        menu.classList.toggle('hidden');
+    });
+</script>

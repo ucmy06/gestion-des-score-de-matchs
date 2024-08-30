@@ -11,7 +11,10 @@ class Log extends Model
         'user_id',
         'match_id',
         'action',
-    ];
+        'change_type',
+        'points_changed',
+        'changed_at',
+        'details'    ];
 
     public function user()
     {

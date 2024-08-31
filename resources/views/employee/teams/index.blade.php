@@ -102,16 +102,20 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                {{-- <th>ID</th> --}}
+                <th>Numéro</th>
+
                 <th>Nom</th>
                 <th>Logo</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($teams as $team)
+            @foreach($teams as $index => $team)
                 <tr>
-                    <td>{{ $team->id }}</td>
+                    {{-- <td>{{ $team->id }}</td> --}}
+                    <td class="py-2 px-4 border-b text-black">{{ $index + 1 }}</td>
+
                     <td>{{ $team->name }}</td>
                     <td>
                         @if($team->logo)

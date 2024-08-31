@@ -143,10 +143,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->group(function 
 
 // Routes pour la gestion du profil
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::patch('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
     // Afficher le formulaire de demande de réinitialisation de mot de passe
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');

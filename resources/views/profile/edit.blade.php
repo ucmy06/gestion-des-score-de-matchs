@@ -40,31 +40,23 @@
                 <input type="email" id="email" name="email" value="{{ old('email', auth()->user()->email) }}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
 
-            <button type="submit" class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Update Profile
-            </button>
-        </form>
-
-        <h2 class="text-xl font-bold mb-4">Change Password</h2>
-        <form action="{{ route('password.update') }}" method="POST">
-            @csrf
             <div class="mb-4">
                 <label for="current_password" class="block text-gray-700 font-medium mb-2">Current Password</label>
-                <input type="password" id="current_password" name="current_password" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <input type="password" id="current_password" name="current_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
 
             <div class="mb-4">
                 <label for="new_password" class="block text-gray-700 font-medium mb-2">New Password</label>
-                <input type="password" id="new_password" name="new_password" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <input type="password" id="new_password" name="new_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
 
             <div class="mb-4">
                 <label for="new_password_confirmation" class="block text-gray-700 font-medium mb-2">Confirm New Password</label>
-                <input type="password" id="new_password_confirmation" name="new_password_confirmation" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <input type="password" id="new_password_confirmation" name="new_password_confirmation" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
 
             <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Update Password
+                Update Profile
             </button>
         </form>
     </div>

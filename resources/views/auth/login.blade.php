@@ -5,6 +5,13 @@
     <div class="w-full max-w-md p-8 bg-gray-100 rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold mb-6 text-center text-gray-900">Connexion</h2>
 
+        <!-- Affichage des erreurs -->
+        @if ($errors->has('login_error'))
+            <div class="mb-4 text-sm text-red-600">
+                {{ $errors->first('login_error') }}
+            </div>
+        @endif
+        
         <form method="POST" action="{{ route('login') }}">
             @csrf
 

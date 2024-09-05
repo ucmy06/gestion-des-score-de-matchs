@@ -17,7 +17,8 @@ class AdminMatchController extends Controller
     }
 
     public function index()
-    {
+    {    $matches = Matches::orderBy('id', 'asc')->get();
+
         $matches = Matches::with(['creator', 'team1', 'team2'])->get(); // Inclure 'creator' si nécessaire
         return view('admin.matches.index', compact('matches'));
     }

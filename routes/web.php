@@ -149,7 +149,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
     // Afficher le formulaire de demande de réinitialisation de mot de passe
-    Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+
+});
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 
 // Envoyer l'email avec le lien de réinitialisation de mot de passe
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -159,4 +161,3 @@ Route::get('password/reset/{token}', [App\Http\Controllers\Auth\ResetPasswordCon
 // Soumettre le formulaire de réinitialisation de mot de passe
 Route::post('password/reset', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])
     ->name('password.update');
-});

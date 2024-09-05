@@ -18,6 +18,8 @@ class EmployeeMatchController extends Controller
 
     public function index()
     {
+        $matches = Matches::orderBy('id', 'asc')->get();
+        
         $matches = auth()->user()->role === 'admin'
             ? Matches::with(['creator', 'team1', 'team2'])->get()
             : Matches::with(['team1', 'team2'])

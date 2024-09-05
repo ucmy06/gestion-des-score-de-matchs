@@ -36,17 +36,24 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-        
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended('home');
-        }
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+        return redirect()->intended('home');
     }
+
+    // Retourner un message d'erreur si l'authentification échoue
+    return back()->withErrors([
+        'login_error' => 'Email ou mot de passe incorrect.',
+    ])->withInput(); // Garde les valeurs saisies
+}
+
 
     public function logout()
     {
